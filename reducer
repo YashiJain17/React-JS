@@ -1,0 +1,7 @@
+useReducer use to manage multiple states or multiple state hook
+it takes 2 arguments (reducerFunction,initial state/current value)
+syntax for useReducer hook const  [state,dispatch] =useReducer(reducerFunction,initial state/current value) 
+dispatch : to trigger action method
+reducer function :it is a pure functions(a function which does not produce any side effects) that take in(accepts) a  state and action and returns a new state.
+given the set of inputs it should returns the same output always.
+we need to define reducer function can be in same component before main function or can be in diff components.it takes 2 args (state,action) and it need to return something
