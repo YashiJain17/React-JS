@@ -1,9 +1,16 @@
 import React from 'react'
-import { Add, ShowAddeditems, Delete, Complete, showCompleted, showDeleted, showAll } from '../actions'
+import { Add, ShowAddeditems, Delete, Complete, showCompleted, showDeleted, showAll,undodelete,undocomplete } from '../actions'
 import { useSelector, useDispatch } from 'react-redux';
 
 export default function List() {
+   
     const myState = useSelector((state) => state.ReducerList)
+
+    // const lala = (e)=>{
+    //     setLalu(true);
+    //     return e.target.disabled = lalu;
+    // }
+    
     const dispatch = useDispatch();
     return (
 
@@ -21,7 +28,11 @@ export default function List() {
                         <p>{val.value}
                             <button type="button" style={{ marginLeft: "10px", marginRight: '10px' }} onClick={() => dispatch(Delete(val))}>Delete</button>
                             <button type="button" onClick={(e) => {
+                              
+                                // e.target.disabled = true;
                                 e.target.disabled = true;
+                                
+                                
                                 return dispatch(Complete(val))
 
                             }}>Complete </button>
@@ -39,20 +50,31 @@ export default function List() {
 
                 {myState.showDeleted ? <h3>Deleted Items : </h3> : null}
                 {myState.showDeleted ? myState.deleteditem.map((val) => {
-                    return <p>{val.value}</p>
+                    return <p>{val.value}<button type='button' style={{ marginLeft: "10px"}} onClick={()=>{
+                        if(myState.completedItem.includes(val)){
+                            return dispatch(undodelete(val))
+                        }
+                        return dispatch(undodelete(val))}}>Undo</button></p>
                 }) : null}
                
             </div>
             <div>
                 {myState.showCompleted ? <h3>Completed Items : </h3> : null}
                 {myState.showCompleted ? myState.completedItem.map((val) => {
-                    return <p>{val.value}</p>
+                    return (
+                        <p>{val.value}
+                        <button type='button' style={{ marginLeft: "10px"}} onClick={()=>{
+                        if(myState.completedItem.includes(val)){
+                            return dispatch(undocomplete(val))
+                        }
+                        return dispatch(undocomplete(val))}}>Undo Complete</button></p>)
+                      
                 }) : null}
-              
+             
             </div>
             <div>
                 {myState.showAll ? <h3>All Items : </h3> : null}
-                {myState.showAll ? myState.allitems.map((val) => {
+                {myState.showAll ? myState.items.map((val) => {
                     return <p>{val.value}</p>
                 }) : null}
 

@@ -10,7 +10,8 @@ const initialState = {
     completedItem: [],
     showCompleted: false,
     allitems: [],
-    showAll: false
+    showAll: false,
+    undoitem: []
 
 };
 
@@ -37,13 +38,13 @@ const ReducerList = (state = initialState, action) => {
                     {
                         id: id,
                         value: value
-                    }], itemName:""
+                    }], itemName: ""
 
             }
 
 
         case "Deleteitem":
-            var pappu = state.items.filter((val) => {
+            var delitem = state.items.filter((val) => {
                 if (val.id === action.payload.id) {
                     return val
                 }
@@ -51,7 +52,7 @@ const ReducerList = (state = initialState, action) => {
 
 
             var arr = [...state.items]
-            var idToDelete = arr.indexOf(pappu[0])
+            var idToDelete = arr.indexOf(delitem[0])
             if (idToDelete !== -1) {
                 arr.splice(idToDelete, 1);
             }
@@ -66,12 +67,12 @@ const ReducerList = (state = initialState, action) => {
             return { ...state, deleteditem: [...state.deleteditem, action.payload], items: arr }
 
         case "Completeitem":
-            var pappu = state.items.filter((val) => {
-                if (val.id === action.payload.id) {
-                    console.log(val)
-                    return val
-                }
-            })
+            // var pappu = state.items.filter((val) => {
+            //     if (val.id === action.payload.id) {
+            //         console.log(val)
+            //         return val
+            //     }
+            // })
 
             return { ...state, completedItem: [...state.completedItem, action.payload] }
 
@@ -79,21 +80,62 @@ const ReducerList = (state = initialState, action) => {
             console.log("object")
             // state.showCompleted = true;
             console.log(state.completedItem)
-            return { ...state, showCompleted: true,showDeleted:false,showAll: false }
+            return { ...state, showCompleted: true, showDeleted: false, showAll: false }
 
 
         case "showDeleteditem":
             console.log("object")
 
             console.log(state.deleteditem)
-            return { ...state, showDeleted: true,showCompleted:false,showAll:false }
+            return { ...state, showDeleted: true, showCompleted: false, showAll: false }
+
+        case "Undoitem":
+            var deletedItems = [...state.deleteditem];
+            var p = deletedItems.indexOf(deletedItems.filter((val) => {
+                if (val === action.payload) {
+                    return val
+                }
+            }))
+            deletedItems.splice(p, 1)
+            // if (state.completedItem.includes(action.payload)){
+            //     return 
+            // }
+
+            return { ...state, items: [...state.items, action.payload], deleteditem: deletedItems }
+
+        case "UndoCompleteitem":
+
+            var CompletedItems = [...state.completedItem];
+            var cI = CompletedItems.indexOf(CompletedItems.filter((val) => {
+                if (val === action.payload) {
+                    console.log(val)
+                    return action.payload
+                }
+            }))
+          
+            console.log(CompletedItems)
+            // var items = [...items];
+            // items.splice(cI, 1)
+         
+            CompletedItems.splice(cI, 1)
+
+
+            return { ...state, completedItem: CompletedItems}
 
         case "ShowAllitem":
-            var itemsarr = [...state.allitems]
-            itemsarr.push(...state.items)
-            itemsarr.push(...state.deleteditem)
-            console.log(itemsarr)
-            return { ...state, showAll: true, allitems: itemsarr,showCompleted:false,showDeleted:false}
+            //  var itemsarr = [...state.items]
+
+            // if(itemsarr.includes(...state.items) 
+            // && itemsarr.includes(...state.deleteditem))
+            // {
+            //     return { ...state, showAll: true, allitems: itemsarr,showCompleted:false,showDeleted:false}
+            // }
+            // else{
+            // itemsarr.push(...state.items)
+            // itemsarr.push(...state.deleteditem)
+            // console.log(itemsarr)
+            return { ...state, showAll: true, items: [...state.items], showCompleted: false, showDeleted: false }
+
         default: return state
     }
 }

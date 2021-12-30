@@ -45,6 +45,22 @@ export const showCompleted = () => {
     }
 }
 
+export const undodelete = (value) => {
+    return {
+        type: "Undoitem",
+        payload: value
+    }
+}
+
+export const undocomplete = (value) => {
+    return {
+        type: "UndoCompleteitem",
+        payload: value
+    }
+}
+
+
+
 
 
 
